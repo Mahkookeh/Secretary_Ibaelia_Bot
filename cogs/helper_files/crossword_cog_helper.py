@@ -25,30 +25,8 @@ def push_score(user_id, username, score, time, guild):
     # check time
     # if user not in users list, create new user
     # add to scores
-    all_users = ibaelia_db.child("users").get()  
-    all_users_vals = all_users.val() 
-    ids = []
-    if all_users_vals:
-        for user in all_users.each():
-            ids.append(user.val()['id'])
-    if user_id not in ids:
-
-        new_user = {
-            "id": user_id,
-            "name": username,
-            "guilds": [guild]
-        }
-        ibaelia_db.child("users").push(new_user)
-    if user_id in ids:
-        curr_user = ibaelia_db.child("users").order_by_child("id").equal_to(user_id).get()
-        curr_user_vals = list(curr_user.val().values())[0]
-        curr_user_key = curr_user.each()[0].key()
-        if guild not in curr_user_vals['guilds']:
-            guilds = curr_user_vals['guilds']
-            guilds.append(guild)
-            ibaelia_db.child("users").child(curr_user_key).update({'guilds': guilds})
-
-
+    ids = add_user_to_database(user_id, username, guild)
+    add_to_server(user_id, guild, ids)
 
     valid, prev_score = is_valid_score(user_id, username, score, time, guild)    
     if valid:
@@ -61,6 +39,33 @@ def push_score(user_id, username, score, time, guild):
         }
         ibaelia_db.child("scores").push(new_score)
     return [valid, prev_score]
+
+def add_user_to_database(user_id, username, guild):
+    all_users = ibaelia_db.child("users").get()  
+    all_users_vals = all_users.val() 
+    ids = []
+    if all_users_vals:
+        for user in all_users.each():
+            ids.append(user.val()['id'])
+    if user_id not in ids:
+        new_user = {
+            "id": user_id,
+            "name": username,
+            "guilds": [guild]
+        }
+        ibaelia_db.child("users").push(new_user)
+    return ids
+
+def add_to_server(user_id, guild, ids):    
+    if user_id in ids:
+        curr_user = ibaelia_db.child("users").order_by_child("id").equal_to(user_id).get()
+        curr_user_vals = list(curr_user.val().values())[0]
+        curr_user_key = curr_user.each()[0].key()
+        if guild not in curr_user_vals['guilds']:
+            guilds = curr_user_vals['guilds']
+            guilds.append(guild)
+            ibaelia_db.child("users").child(curr_user_key).update({'guilds': guilds})
+
 
 def is_valid_score(user_id, username, score, time, guild):
     all_scores = ibaelia_db.child("scores").order_by_child("time").get().val()

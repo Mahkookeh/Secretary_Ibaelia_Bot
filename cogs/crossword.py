@@ -16,9 +16,22 @@ class CrosswordCommands(commands.Cog):
     # Command to send the link to the mini crossword
     @commands.command(name="cwlink", help="I'll send the link to the mini crossword puzzle. Good luck!")
     async def return_crossword_link(self, ctx):
-        link = f"<https://www.nytimes.com/crosswords/game/mini>"
-        message = f"Here's the link for the crossword:\n{link}\nGood luck!"
-        await ctx.send(message)
+        embed = discord.Embed(title="My To Dos~", color=0x14e1d4)
+        embed.add_field(value="[Here's](https://www.nytimes.com/crosswords/game/mini) the link for the crossword. \nGood luck!", name='\u200b')
+        embed.set_footer(text="uwu")
+        await ctx.send(embed=embed)
+
+    @commands.command(name="cwregister", help="I'll add you to the list of people to keep track of in this server.")
+    async def register_for_crossword(self, ctx):
+        user_id = str(ctx.message.author.id)
+        guild_id = str(ctx.message.guild.id)
+        guild_name = str(ctx.message.guild.name)
+        user = await self.bot.fetch_user(ctx.message.author.id)
+        username = str(user)
+        ids = cch.add_user_to_database(user_id, username, guild_id)
+        cch.add_to_server(user_id, guild_id, ids)
+        await ctx.send(f"You ({username}) are registered for the crossword scoreboard in {guild_name}.")
+
 
     @commands.command(name="cwupload", help="Attach an image so I can add your time to the scoreboard!")
     async def upload_score(self, ctx):
@@ -26,8 +39,8 @@ class CrosswordCommands(commands.Cog):
         image_request = requests.get(image_url)
         provided_image = Image.open(BytesIO(image_request.content))
         formatted_time = cse.get_time_from_image(provided_image)
-        user_id = await self.bot.fetch_user(ctx.message.author.id)
-        username = str(user_id)
+        user = await self.bot.fetch_user(ctx.message.author.id)
+        username = str(user)
         done, prev_score = cch.push_score(str(ctx.message.author.id), username, formatted_time, str(ctx.message.created_at), str(ctx.message.guild.id))
         if done:
             await ctx.send(f"Your time of {formatted_time} has been uploaded to today's scoreboard.")
