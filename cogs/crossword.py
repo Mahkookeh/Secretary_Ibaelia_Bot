@@ -64,8 +64,8 @@ class CrosswordCommands(commands.Cog):
         guild_id = str(ctx.message.guild.id)
         scores = cch.get_scores_by_time(message_time, guild_id)
         embed = discord.Embed(title="Daily Crossword Scoreboard", color=0x14e1d4)
-        for score in scores:
-            embed.add_field(name=score['name'], value=score['score'], inline=False)
+        for idx in range(len(scores)):
+            embed.add_field(name=f"{idx + 1}. {scores[idx]['name']}", value=scores[idx]['score'], inline=False)
         embed.set_footer(text="uwu")
         await ctx.message.channel.send(embed=embed)
 
