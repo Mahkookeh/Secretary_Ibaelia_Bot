@@ -1,0 +1,9 @@
+Create mysql database
+
+
+
+Extract image from discord/facebook
+Extract text and look for "You solved a Mini puzzle in xyz"
+Parse xyz
+Add to score database
+
