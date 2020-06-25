@@ -6,7 +6,6 @@ from discord.ext import commands
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = os.getenv("DISCORD_GUILD")
-FIREBASE_APIKEY = os.getenv("FIREBASE_APIKEY")
 
 pic_ext = ['.jpg','.png','.jpeg']
 
