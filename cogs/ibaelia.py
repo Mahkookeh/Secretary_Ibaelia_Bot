@@ -7,12 +7,17 @@ class IbaeliaCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(name="todo", help="My To Dos~")
+    async def todo(self, ctx):
+        embed = discord.Embed(title="My To Dos~",color=0x14e1d4)
+        embed.add_field(value="[Here's](https://trello.com/b/tPqbNaGK/crossword-app) the current To Do list for Secretary Ibaelia.", name='\u200b')
+        embed.set_footer(text="uwu")
+        await ctx.send(embed=embed)
+
     @commands.command(name="sourcecode", help="Don't stare too long!")
     async def sourcecode(self, ctx):
         embed = discord.Embed(title="You want to look at my *what*?! :flushed:",color=0x14e1d4)
         embed.add_field(value="Oh gosh, don't stare too long!\n[(⁄⁄•⁄ω⁄•⁄⁄)](https://github.com/Mahkookeh/Secretary_Ibaelia_Bot)\nHow embarrassing...", name='\u200b')
-        # embed.add_field(value="[(⁄⁄•⁄ω⁄•⁄⁄)](https://github.com/Mahkookeh/Secretary_Ibaelia_Bot)", name='\u200b')
-        # embed.add_field(value="How embarrassing...", name='\u200b')
         embed.set_footer(text="uwu")
         await ctx.send(embed=embed)
 
