@@ -2,7 +2,7 @@ import discord
 from discord.utils import get
 from discord.ext import commands
 
-class IbaeliaCog(commands.Cog):
+class IbaeliaCommands(commands.Cog):
     """Ibaelia Bot's General Commands"""
     def __init__(self, bot):
         self.bot = bot
@@ -36,4 +36,4 @@ class IbaeliaCog(commands.Cog):
         await ctx.send(file=file, embed=embed)
         
 def setup(bot):
-    bot.add_cog(IbaeliaCog(bot))
+    bot.add_cog(IbaeliaCommands(bot))

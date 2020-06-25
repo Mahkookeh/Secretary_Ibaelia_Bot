@@ -15,7 +15,7 @@ initial_extensions = [
     'cogs.ibaelia'
     ]
 
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix="uwu!")
 
 if __name__ == '__main__':
     for extension in initial_extensions:
@@ -25,6 +25,8 @@ if __name__ == '__main__':
 @bot.event
 async def on_ready():
     print(f"{bot.user} has connected to Discord!")
+    activity = discord.Activity(name='your uwus!',type=2)
+    await bot.change_presence(activity=activity)
 
 # Errors >!< 
 @bot.event

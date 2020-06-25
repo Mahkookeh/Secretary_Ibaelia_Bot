@@ -8,7 +8,7 @@ from io import BytesIO
 
 from discord.ext import commands
 
-class CrosswordCog(commands.Cog):
+class CrosswordCommands(commands.Cog):
     """Crossword Commands"""
     def __init__(self, bot):
         self.bot = bot
@@ -55,6 +55,6 @@ class CrosswordCog(commands.Cog):
             embed.add_field(name=score['name'], value=score['score'], inline=False)
         embed.set_footer(text="uwu")
         await ctx.message.channel.send(embed=embed)
-        
+
 def setup(bot):
-    bot.add_cog(CrosswordCog(bot))
+    bot.add_cog(CrosswordCommands(bot))
