@@ -9,21 +9,21 @@ class IbaeliaCommands(commands.Cog):
 
     @commands.command(name="todo", help="My To Dos~")
     async def todo(self, ctx):
-        embed = discord.Embed(title="My To Dos~",color=0x14e1d4)
+        embed = discord.Embed(title="My To Dos~", color=0x14e1d4)
         embed.add_field(value="[Here's](https://trello.com/b/tPqbNaGK/crossword-app) the current To Do list for Secretary Ibaelia.", name='\u200b')
         embed.set_footer(text="uwu")
         await ctx.send(embed=embed)
 
     @commands.command(name="sourcecode", help="Don't stare too long!")
     async def sourcecode(self, ctx):
-        embed = discord.Embed(title="You want to look at my *what*?! :flushed:",color=0x14e1d4)
+        embed = discord.Embed(title="You want to look at my *what*?! :flushed:", color=0x14e1d4)
         embed.add_field(value="Oh gosh, don't stare too long!\n[(⁄⁄•⁄ω⁄•⁄⁄)](https://github.com/Mahkookeh/Secretary_Ibaelia_Bot)\nHow embarrassing...", name='\u200b')
         embed.set_footer(text="uwu")
         await ctx.send(embed=embed)
 
     @commands.command(name="unsubscribe", help="Unsubscribe from my antics.")
     async def unsubscribe(self, ctx):
-        embed = discord.Embed(title="You meanie! :cry:", description=f"You're stuck with me though...",color=0x14e1d4)
+        embed = discord.Embed(title="You meanie! :cry:", description=f"You're stuck with me though...", color=0x14e1d4)
         irelia_buns = "ibaelia_images//sad_irelia.png"
         file = discord.File(irelia_buns, filename="image.png")
         embed.set_image(url="attachment://image.png")

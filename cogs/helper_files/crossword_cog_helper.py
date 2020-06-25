@@ -16,7 +16,6 @@ def get_scores_by_time(time, guild):
     for score in list_scores:
         user = ibaelia_db.child("users").order_by_child("id").equal_to(score["user_id"]).get().val()
         user_vals = list(user.values())[0]
-        print(user_vals)
         if guild in user_vals['guilds']:
             final_scores.append(score)
     return final_scores
@@ -31,11 +30,7 @@ def push_score(user_id, username, score, time, guild):
     ids = []
     if all_users_vals:
         for user in all_users.each():
-            print(user)
-            print(user.key())
             ids.append(user.val()['id'])
-        # ids = [user['id'] for user in list(all_users.values())]
-    print(ids)
     if user_id not in ids:
 
         new_user = {
@@ -48,8 +43,6 @@ def push_score(user_id, username, score, time, guild):
         curr_user = ibaelia_db.child("users").order_by_child("id").equal_to(user_id).get()
         curr_user_vals = list(curr_user.val().values())[0]
         curr_user_key = curr_user.each()[0].key()
-        print(curr_user)
-        print(curr_user_key)
         if guild not in curr_user_vals['guilds']:
             guilds = curr_user_vals['guilds']
             guilds.append(guild)
