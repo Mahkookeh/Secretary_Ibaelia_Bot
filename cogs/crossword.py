@@ -69,5 +69,27 @@ class CrosswordCommands(commands.Cog):
         embed.set_footer(text="uwu")
         await ctx.message.channel.send(embed=embed)
 
+    @commands.command(name="cwuploadother", help="Upload someone else's score.", hidden=True, pass_context=True)
+    async def upload_other_user_score(self, ctx, *, message_args):
+        author_id = ctx.message.author.id
+        author = str(author_id)
+        owner = str(134527530014212096)
+        owner_name = str(await self.bot.fetch_user(owner))
+        if author != owner:
+            await ctx.send(f"Only {owner_name} has permissions to use this command.")
+            return
+        other_user_id = message_args
+        image_url = ctx.message.attachments[0].url
+        image_request = requests.get(image_url)
+        provided_image = Image.open(BytesIO(image_request.content))
+        formatted_time = cse.get_time_from_image(provided_image)
+        other_user = await self.bot.fetch_user(other_user_id)
+        other_username = str(other_user)
+        done, prev_score = cch.push_score(str(other_user_id), other_username, formatted_time, str(ctx.message.created_at), str(ctx.message.guild.id))
+        if done:
+            await ctx.send(f"{other_username}'s time of {formatted_time} has been uploaded to today's scoreboard.")
+        else:
+            await ctx.send(f"Nice try, but {other_username} already has a submitted time of {prev_score} for today.")
+
 def setup(bot):
     bot.add_cog(CrosswordCommands(bot))
