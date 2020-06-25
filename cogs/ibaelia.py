@@ -17,6 +17,15 @@ class IbaeliaCog(commands.Cog):
         embed.set_footer(text="uwu")
         await ctx.send(file=file, embed=embed)
     
+    @commands.command(name="gotosleep", help="Go to sleep!")
+    async def go_to_sleep(self, ctx):
+        embed = discord.Embed(color=0x14e1d4)
+        irelia_buns = "ibaelia_images//stayinguptoolatecheerleader.gif"
+        file = discord.File(irelia_buns, filename="image.gif")
+        embed.set_image(url="attachment://image.gif")
+        embed.set_footer(text="uwu")
+        await ctx.send(file=file, embed=embed)
+    
     @commands.command(name="uwu")
     async def test_function(self, ctx):
         embed = discord.Embed(color=0x14e1d4)
