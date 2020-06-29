@@ -47,6 +47,10 @@ class IbaeliaCommands(commands.Cog):
         embed.set_image(url="attachment://image.png")
         embed.set_footer(text="uwu")
         await ctx.send(file=file, embed=embed)
+
+    @commands.command(aliases=['hewlp', 'hwelp', 'hwewlp', 'hewelp'])
+    async def _help(self, ctx):
+        await ctx.send_help()
         
 def setup(bot):
     bot.add_cog(IbaeliaCommands(bot))

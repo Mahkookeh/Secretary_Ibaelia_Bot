@@ -5,6 +5,7 @@ import requests
 from PIL import Image
 from discord.utils import get
 from io import BytesIO
+from dateutil.parser import parse
 
 from discord.ext import commands
 
@@ -16,12 +17,13 @@ class CrosswordCommands(commands.Cog):
     # Command to send the link to the mini crossword
     @commands.command(name="cwlink", help="I'll send the link to the mini crossword puzzle. Good luck!")
     async def return_crossword_link(self, ctx):
-        embed = discord.Embed(title="My To Dos~", color=0x14e1d4)
-        embed.add_field(value="[Here's](https://www.nytimes.com/crosswords/game/mini) the link for the crossword. \nGood luck!", name='\u200b')
+        embed = discord.Embed(title="Good luck!", color=0x14e1d4)
+        embed.add_field(value="[Here's](https://www.nytimes.com/crosswords/game/mini) the link for the crossword.", name='\u200b')
         embed.set_footer(text="uwu")
         await ctx.send(embed=embed)
 
     @commands.command(name="cwregister", help="I'll add you to the list of people to keep track of in this server.")
+    @commands.guild_only()
     async def register_for_crossword(self, ctx):
         user_id = str(ctx.message.author.id)
         guild_id = str(ctx.message.guild.id)
@@ -34,6 +36,7 @@ class CrosswordCommands(commands.Cog):
 
 
     @commands.command(name="cwupload", help="Attach an image so I can add your time to the scoreboard!")
+    @commands.guild_only()
     async def upload_score(self, ctx):
         image_url = ctx.message.attachments[0].url
         image_request = requests.get(image_url)
@@ -48,6 +51,7 @@ class CrosswordCommands(commands.Cog):
             await ctx.send(f"Nice try, but you've already submitted a time of {prev_score} for today.")
 
     @commands.command(name="cwscores", help="I'll send you a list of your scores for the past week.")
+    @commands.guild_only()
     async def get_personal_scores(self, ctx):
         user_id = str(ctx.message.author.id)
         guild_id = str(ctx.message.guild.id)
@@ -58,18 +62,38 @@ class CrosswordCommands(commands.Cog):
         embed.set_footer(text="uwu")
         await ctx.message.channel.send(embed=embed)
 
-    @commands.command(name="cwscoreboard", help="I'll show you everyone's scores for today.")
-    async def get_scoreboard(self, ctx):
-        message_time = str(ctx.message.created_at).split(" ")[0]
+    @commands.command(name="cwscoreboard", help="I'll show you everyone's scores for today.", pass_context=True)
+    @commands.guild_only()
+    async def get_scoreboard(self, ctx, *, message_args=None):
+
+        message_time = message_args
+        message_time_curr = str(ctx.message.created_at).split(" ")[0]
+        message = None
+
+        if message_time is None:
+            message_time = message_time_curr
         guild_id = str(ctx.message.guild.id)
-        scores = cch.get_scores_by_time(message_time, guild_id)
-        embed = discord.Embed(title="Daily Crossword Scoreboard", color=0x14e1d4)
+
+        if cch.check_date(message_time):
+            parsed_name = parse(message_time)
+            scores = cch.get_scores_by_time(message_time, guild_id)
+        else:
+            parsed_name = parse(message_time_curr)
+            message = "I couldn't parse the date you gave me, so here's today's scoreboard instead."
+            scores = cch.get_scores_by_time(message_time_curr, guild_id)
+
+        date_name = parsed_name.strftime('%A')
+        date_month = parsed_name.strftime('%B')
+        date_number = parsed_name.strftime('%d')
+
+        embed = discord.Embed(title=f"Daily Crossword Scoreboard for {date_name}, {date_month} {date_number}", description=message, color=0x14e1d4)
         for idx in range(len(scores)):
             embed.add_field(name=f"{idx + 1}. {scores[idx]['name']}", value=scores[idx]['score'], inline=False)
         embed.set_footer(text="uwu")
         await ctx.message.channel.send(embed=embed)
 
     @commands.command(name="cwuploadother", help="Upload someone else's score.", hidden=True, pass_context=True)
+    @commands.guild_only()
     async def upload_other_user_score(self, ctx, *, message_args):
         author_id = ctx.message.author.id
         author = str(author_id)

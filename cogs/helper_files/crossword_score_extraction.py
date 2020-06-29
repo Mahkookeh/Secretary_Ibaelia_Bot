@@ -12,7 +12,9 @@ image_path = "..\\..\\test_images\\"
 def parse_text(text):
     start = "puzzle in"
     end = r"\."
+    print(text)
     result = re.search(r"%s\s?(.*)%s|%s\n*(.*)" % (start, end, start), text)
+    print(result)
     if result.group(1):
         return result.group(1)
     else:

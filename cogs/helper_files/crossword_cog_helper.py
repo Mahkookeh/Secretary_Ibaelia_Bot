@@ -1,4 +1,7 @@
+import datetime
 from firebase_config import ibaelia_db
+from dateutil.parser import parse
+
 
 def get_scores_by_id(user_id, guild, limit=10):
     all_scores = ibaelia_db.child("scores").order_by_child("time").get().val()
@@ -19,6 +22,29 @@ def get_scores_by_time(time, guild):
         if guild in user_vals['guilds']:
             final_scores.append(score)
     return final_scores
+
+
+def check_date(time):
+    correctDate = None
+    try:
+        year, month, day = map(int, time.split("-"))
+        newDate = datetime.datetime(year, month, day)
+        correctDate = True
+    except ValueError:
+        correctDate = False
+    return correctDate
+
+
+def get_current_week(time):
+    today = parse(time)
+    today_date = today.weekday()
+    week_array = [(today + datetime.timedelta(days=i)).date() for i in range(-1 - today_date, 6 - today_date)]
+    named_days_array = [day.strftime('%A') for day in week_array]
+    week_dict = dict(zip(named_days_array, week_array))
+    print(week_dict)
+    return week_array
+
+
 
 def push_score(user_id, username, score, time, guild):
     # get users
