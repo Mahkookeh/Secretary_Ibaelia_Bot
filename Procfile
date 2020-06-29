@@ -1,1 +1,1 @@
-worker: python secretary_ibaelia_bot.py
+web: python secretary_ibaelia_bot.py
