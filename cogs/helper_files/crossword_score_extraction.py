@@ -3,7 +3,8 @@ import pytesseract
 import re
 
 # Set tesseract path
-pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"./.apt/usr/share/tesseract-ocr/4.00/tessdata/tesseract.exe"
+# pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 # Set image path
 image_path = "..\\..\\test_images\\"
