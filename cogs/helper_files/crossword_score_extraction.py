@@ -1,9 +1,10 @@
 import PIL
 import pytesseract
 import re
+import os
 
 # Set tesseract path
-pytesseract.pytesseract.tesseract_cmd = r"/app/.apt/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = os.getenv("TESS_CMD")
 # pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 # Set image path
@@ -25,6 +26,7 @@ def format_zeros(time):
     return time
 
 def format_time(time_text):
+    time_text = time_text.strip()
     if ":" in time_text:
         times = time_text.split(":")[::-1]
     elif "seconds" in time_text:
