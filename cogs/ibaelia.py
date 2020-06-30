@@ -48,7 +48,7 @@ class IbaeliaCommands(commands.Cog):
         embed.set_footer(text="uwu")
         await ctx.send(file=file, embed=embed)
 
-    @commands.command(aliases=['hewlp', 'hwelp', 'hwewlp', 'hewelp'])
+    @commands.command(aliases=['hewlp', 'hwelp', 'hwewlp', 'hewelp'], hidden=True)
     async def _help(self, ctx):
         await ctx.send_help()
         
