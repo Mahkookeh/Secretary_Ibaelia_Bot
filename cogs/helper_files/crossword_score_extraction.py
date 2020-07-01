@@ -30,9 +30,9 @@ def format_time(time_text):
     elif "seconds" in time_text:
         times = [time_text[:time_text.index(" ")]]
 
-    hours = "00:" if len(times) < 3 else f"{format_zeros(times[2])}:"
-    minutes = "00:" if len(times) < 2 else f"{format_zeros(times[1])}:"
-    seconds = f"{format_zeros(times[0])}"
+    hours = "00:" if len(times) < 3 else "{:02d}:".format(times[2])
+    minutes = "00:" if len(times) < 2 else "{:02d}:".format(times[1])
+    seconds = "{:02d}".format(times[0])
     return f"{hours}{minutes}{seconds}"
 
 def get_time_from_image(img):
