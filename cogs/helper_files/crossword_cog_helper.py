@@ -121,22 +121,30 @@ def format_scoreboard_embed(embed, scores):
     # The first field will be the current leader shout out
     current_leader_name = "---------------:small_blue_diamond: CURRENT LEADER :small_blue_diamond:---------------"
     current_leader_value = "\n"
-    leader = scores[0]["name"].split("#")[0]
+    if len(scores) != 0:
+        leader = scores[0]["name"].split("#")[0]
+        leader_fullname = scores[0]["name"]
+    else:
+        leader = "no_one"
+        leader_fullname = "no_one#rip"
     # Compute the number of tabs to offset the name by based on name length
     name_length = len(leader)
-    num_tabs = round((42 - (name_length + 2)) / 4.)
-    current_leader_value += "```ini\n>\u009b" * num_tabs
-    current_leader_value += f"[{leader}]\u009b\u009b\u009b\u009b\u009b<```"
+    num_tabs = round((36 - (name_length + 2)) / 4.)
+    current_leader_value += "```ini\n>" + "  " * num_tabs
+    current_leader_value += f"[{leader}]" + "  " * num_tabs + "<```"
     # Add bottom border
-    current_leader_value += "\n" + ("=" * 42)
+    current_leader_value += "\n" + ("=" * 36)
     embed.add_field(name=current_leader_name, value=current_leader_value, inline=False)
 
     # Add blank field for spacing
     embed.add_field(name="\u200b", value="\u200b", inline=False)
 
     # First place gets a special trophy as well
-    time = f"```fix\n{scores[0]['score']}```\n"
-    embed.add_field(name=f":first_place: \u009b{scores[0]['name']}", value=time,
+    if len(scores) != 0:
+        time = f"```fix\n{scores[0]['score']}```\n"
+    else:
+        time = "```fix\ninfinity```\n"
+    embed.add_field(name=f":first_place: \u2003{leader_fullname}", value=time,
                     inline=True)
     embed.add_field(name="\u200b \u200b \u200b :trophy:", value="\u200b", inline=True)
 
@@ -158,7 +166,7 @@ def format_scoreboard_embed(embed, scores):
             time = f"```{scores[idx]['score']}```\n"
 
         # We use inline to shorten the code block width
-        embed.add_field(name=f"{placement} \u009b{scores[idx]['name']}", value=time,
+        embed.add_field(name=f"{placement} \u2003{scores[idx]['name']}", value=time,
                         inline=True)
         # Add blank field for second column
         embed.add_field(name="\u200b", value="\u200b", inline=True)
