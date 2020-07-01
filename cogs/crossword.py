@@ -50,19 +50,30 @@ class CrosswordCommands(commands.Cog):
         else:
             await ctx.send(f"Nice try, but you've already submitted a time of {prev_score} for today.")
 
-    @commands.command(name="cwscores", help="I'll send you a list of your scores for the past week.")
+    @commands.command(name="cwscores", help="I'll send you a list of your scores for the past week.", pass_context=True)
     @commands.guild_only()
-    async def get_personal_scores(self, ctx):
+    async def get_personal_scores(self, ctx, *, message_args=None):
         num_days = 7
 
         user_id = str(ctx.message.author.id)
         guild_id = str(ctx.message.guild.id)
-        message_time_curr = str(ctx.message.created_at).split(" ")[0]
 
+        if message_args:
+            args = message_args.split(' ')
+            if len(args) > 1:
+                # TODO Error handling
+                await ctx.message.channel.send(f"Make sure to put in proper arguments for the command.\nThey should follow the format:\n`{ctx.prefix}cwscores [optional: user id]`")
+                raise Exception("Bad arguments.")
+            user_id = args[0]
+
+        user = await self.bot.fetch_user(user_id)
+        username = str(user)
+
+        message_time_curr = str(ctx.message.created_at).split(" ")[0]
 
         scores = cch.get_scores_by_id(user_id, guild_id, message_time_curr, num_days)
 
-        embed = discord.Embed(title=f"Your Crossword Scores for the past {num_days} days", color=0x14e1d4)
+        embed = discord.Embed(title=f"{username}'s Crossword Scores for the past {num_days} days", color=0x14e1d4)
         for date, score in scores.items():
             if score:
                 embed.add_field(name=f"{parse(str(date)).strftime('%A')}, {date}", value=score['score'], inline=False)
@@ -71,10 +82,13 @@ class CrosswordCommands(commands.Cog):
         embed.set_footer(text="uwu")
         await ctx.message.channel.send(embed=embed)
 
+
     @commands.command(name="cwscoreboard", help="I'll show you everyone's scores for today.", pass_context=True)
     @commands.guild_only()
     async def get_scoreboard(self, ctx, *, message_args=None):
 
+        # TODO Error handling
+        
         message_time = message_args
         message_time_curr = str(ctx.message.created_at).split(" ")[0]
         message = "\u200b"
