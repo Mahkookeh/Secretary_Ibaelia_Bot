@@ -4,13 +4,37 @@ from dateutil.parser import parse
 import discord
 
 
-def get_scores_by_id(user_id, guild, limit=10):
+def get_scores_by_id(user_id, guild, time, limit=7):
+    dates = get_past_num_days(time, limit)[::-1]
+    
+    final_scores = {key:None for key in dates}
+
     all_scores = ibaelia_db.child("scores").order_by_child("time").get().val()
     if all_scores is None:
-        return []
-    list_scores = [score for score in list(all_scores.values()) if score["user_id"] == user_id][
-                  ::-1][:limit]
-    return list_scores
+        return final_scores
+    list_scores = [score for score in list(all_scores.values()) if score["user_id"] == user_id][::-1][:limit]
+    print(list_scores)
+
+
+
+
+
+    
+    # Check if a score's date is in the date array
+    # If so, add score to score list
+    # If not, then add None to score list
+
+    count = 0
+    for score_idx in range(count, len(list_scores)):
+        for date in dates:
+            print(f"date: {date} | score date: {list_scores[score_idx]['time'].split(' ')[0]}")
+            if list_scores[score_idx]["time"].split(" ")[0] == str(date):
+                final_scores[date] = list_scores[score_idx]
+                count += 1
+                break
+    print(final_scores)
+
+    return final_scores
 
 
 def get_scores_by_time(time, guild):
@@ -18,8 +42,7 @@ def get_scores_by_time(time, guild):
     all_scores = ibaelia_db.child("scores").order_by_child("score").get().val()
     if all_scores is None:
         return []
-    list_scores = [score for score in list(all_scores.values()) if
-                   score['time'].split(" ")[0] == time]
+    list_scores = [score for score in list(all_scores.values()) if score['time'].split(" ")[0] == time]
     for score in list_scores:
         user = ibaelia_db.child("users").order_by_child("id").equal_to(score["user_id"]).get().val()
         user_vals = list(user.values())[0]
@@ -39,14 +62,9 @@ def check_date(time):
     return correctDate
 
 
-def get_current_week(time):
+def get_past_num_days(time, num):
     today = parse(time)
-    today_date = today.weekday()
-    week_array = [(today + datetime.timedelta(days=i)).date() for i in
-                  range(-1 - today_date, 6 - today_date)]
-    named_days_array = [day.strftime('%A') for day in week_array]
-    week_dict = dict(zip(named_days_array, week_array))
-    print(week_dict)
+    week_array = [(today + datetime.timedelta(days=i)).date() for i in range(num * -1, 0)]
     return week_array
 
 
