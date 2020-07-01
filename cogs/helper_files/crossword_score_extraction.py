@@ -19,11 +19,6 @@ def parse_text(text):
     else:
         return result.group(2)
 
-def format_zeros(time):
-    if len(time) == 1:
-        return f"0{time}"
-    return time
-
 def format_time(time_text):
     if ":" in time_text:
         times = time_text.split(":")[::-1]
