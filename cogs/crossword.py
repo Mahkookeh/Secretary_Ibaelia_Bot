@@ -87,7 +87,7 @@ class CrosswordCommands(commands.Cog):
         date_number = parsed_name.strftime('%d')
 
         embed = discord.Embed(title=f"Daily Crossword Scoreboard for {date_name}, {date_month} {date_number}", description=message, color=0x14e1d4)
-        embed = cch.format_scoreboard_embed(embed)
+        embed = cch.format_scoreboard_embed(embed, scores)
         await ctx.message.channel.send(embed=embed)
 
     @commands.command(name="cwuploadother", help="Upload someone else's score.", hidden=True, pass_context=True)
