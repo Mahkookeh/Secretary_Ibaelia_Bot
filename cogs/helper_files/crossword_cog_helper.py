@@ -13,12 +13,6 @@ def get_scores_by_id(user_id, guild, time, limit=7):
     if all_scores is None:
         return final_scores
     list_scores = [score for score in list(all_scores.values()) if score["user_id"] == user_id][::-1][:limit]
-    print(list_scores)
-
-
-
-
-
     
     # Check if a score's date is in the date array
     # If so, add score to score list
@@ -27,13 +21,10 @@ def get_scores_by_id(user_id, guild, time, limit=7):
     count = 0
     for score_idx in range(count, len(list_scores)):
         for date in dates:
-            print(f"date: {date} | score date: {list_scores[score_idx]['time'].split(' ')[0]}")
             if list_scores[score_idx]["time"].split(" ")[0] == str(date):
                 final_scores[date] = list_scores[score_idx]
                 count += 1
                 break
-    print(final_scores)
-
     return final_scores
 
 
@@ -64,7 +55,7 @@ def check_date(time):
 
 def get_past_num_days(time, num):
     today = parse(time)
-    week_array = [(today + datetime.timedelta(days=i)).date() for i in range(num * -1, 0)]
+    week_array = [(today + datetime.timedelta(days=i)).date() for i in range(1-num, 1)]
     return week_array
 
 
@@ -194,7 +185,7 @@ def format_scoreboard_embed(embed, scores):
         embed.add_field(name="\u200b", value="\u200b", inline=True)
 
     embed.timestamp = datetime.datetime.now()
-    embed = embed.set_footer(text=f"uwu wowow {leader} senpai is so sugoiiii")
+    embed = embed.set_footer(text=f"uwu")
 
     # Footer image
     crossword_icon = "ibaelia_images/wow_irelia.jpg"
