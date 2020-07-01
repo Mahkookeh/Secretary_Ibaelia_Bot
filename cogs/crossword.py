@@ -1,5 +1,5 @@
 import discord
-import cogs.helper_files.crossword_cog_helper as cch 
+import cogs.helper_files.crossword_cog_helper as cch
 import cogs.helper_files.crossword_score_extraction as cse
 import requests
 from PIL import Image
@@ -68,7 +68,7 @@ class CrosswordCommands(commands.Cog):
 
         message_time = message_args
         message_time_curr = str(ctx.message.created_at).split(" ")[0]
-        message = None
+        message = "\u200b"
 
         if message_time is None:
             message_time = message_time_curr
@@ -87,9 +87,7 @@ class CrosswordCommands(commands.Cog):
         date_number = parsed_name.strftime('%d')
 
         embed = discord.Embed(title=f"Daily Crossword Scoreboard for {date_name}, {date_month} {date_number}", description=message, color=0x14e1d4)
-        for idx in range(len(scores)):
-            embed.add_field(name=f"{idx + 1}. {scores[idx]['name']}", value=scores[idx]['score'], inline=False)
-        embed.set_footer(text="uwu")
+        embed = cch.format_scoreboard_embed(embed)
         await ctx.message.channel.send(embed=embed)
 
     @commands.command(name="cwuploadother", help="Upload someone else's score.", hidden=True, pass_context=True)
