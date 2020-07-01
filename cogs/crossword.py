@@ -53,12 +53,21 @@ class CrosswordCommands(commands.Cog):
     @commands.command(name="cwscores", help="I'll send you a list of your scores for the past week.")
     @commands.guild_only()
     async def get_personal_scores(self, ctx):
+        num_days = 7
+
         user_id = str(ctx.message.author.id)
         guild_id = str(ctx.message.guild.id)
-        scores = cch.get_scores_by_id(user_id, guild_id, 7)
-        embed = discord.Embed(title="Your Weekly Crossword Scores", color=0x14e1d4)
-        for score in scores:
-            embed.add_field(name=score['time'].split(" ")[0], value=score['score'], inline=False)
+        message_time_curr = str(ctx.message.created_at).split(" ")[0]
+
+
+        scores = cch.get_scores_by_id(user_id, guild_id, message_time_curr, num_days)
+
+        embed = discord.Embed(title=f"Your Crossword Scores for the past {num_days} days", color=0x14e1d4)
+        for date, score in scores.items():
+            if score:
+                embed.add_field(name=f"{parse(str(date)).strftime('%A')}, {date}", value=score['score'], inline=False)
+            else:
+                embed.add_field(name=f"{parse(str(date)).strftime('%A')}, {date}", value="---", inline=False)
         embed.set_footer(text="uwu")
         await ctx.message.channel.send(embed=embed)
 
