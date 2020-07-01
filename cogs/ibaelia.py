@@ -10,7 +10,7 @@ class IbaeliaCommands(commands.Cog):
     @commands.command(name="todo", help="My To Dos~")
     async def todo(self, ctx):
         embed = discord.Embed(title="My To Dos~", color=0x14e1d4)
-        embed.add_field(value="[Here's](https://trello.com/b/tPqbNaGK/crossword-app) the current To Do list for Secretary Ibaelia.", name='\u200b')
+        embed.add_field(value="[Here's](https://github.com/Mahkookeh/Secretary_Ibaelia_Bot/projects/1) the current To Do list for Secretary Ibaelia.", name='\u200b')
         embed.set_footer(text="uwu")
         await ctx.send(embed=embed)
 
