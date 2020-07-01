@@ -111,15 +111,17 @@ def is_valid_score(user_id, username, score, time, guild):
 
 
 def format_scoreboard_embed(embed, scores):
+    files = []
     digits = {4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
 
     # I don't know if creating the discord.File object is necessary to get the icon url?
-    crossword_icon = "crossword_images//crossword_icon.jpg"
-    discord.File(crossword_icon, filename="image.jpg")
-    embed = embed.set_thumbnail(url="attachment://image.jpg")
+    crossword_icon = "crossword_images/crossword_icon.jpg"
+    file = discord.File(crossword_icon, filename="crossword_icon.jpg")
+    files.append(file)
+    embed = embed.set_thumbnail(url="attachment://crossword_icon.jpg")
 
     # The first field will be the current leader shout out
-    current_leader_name = "---------------:small_blue_diamond: CURRENT LEADER :small_blue_diamond:---------------"
+    current_leader_name = "-------------------:small_blue_diamond: CURRENT LEADER :small_blue_diamond:-------------------"
     current_leader_value = "\n"
     if len(scores) != 0:
         leader = scores[0]["name"].split("#")[0]
@@ -129,11 +131,11 @@ def format_scoreboard_embed(embed, scores):
         leader_fullname = "no_one#rip"
     # Compute the number of tabs to offset the name by based on name length
     name_length = len(leader)
-    num_tabs = round((36 - (name_length + 2)) / 4.)
+    num_tabs = round((38 - (name_length + 2)) / 4.)
     current_leader_value += "```ini\n>" + "  " * num_tabs
     current_leader_value += f"[{leader}]" + "  " * num_tabs + "<```"
     # Add bottom border
-    current_leader_value += "\n" + ("=" * 36)
+    current_leader_value += "\n" + ("=" * 41)
     embed.add_field(name=current_leader_name, value=current_leader_value, inline=False)
 
     # Add blank field for spacing
@@ -146,7 +148,8 @@ def format_scoreboard_embed(embed, scores):
         time = "```fix\ninfinity```\n"
     embed.add_field(name=f":first_place: \u2003{leader_fullname}", value=time,
                     inline=True)
-    embed.add_field(name="\u200b \u200b \u200b :trophy:", value="\u200b", inline=True)
+    embed.add_field(name=":trophy:", value="\u200b", inline=True)
+    embed.add_field(name="\u200b", value="\u200b", inline=True)
 
     for idx in range(len(scores)):
         if idx == 0:
@@ -168,15 +171,17 @@ def format_scoreboard_embed(embed, scores):
         # We use inline to shorten the code block width
         embed.add_field(name=f"{placement} \u2003{scores[idx]['name']}", value=time,
                         inline=True)
-        # Add blank field for second column
+        # Add blank field for other columns
+        embed.add_field(name="\u200b", value="\u200b", inline=True)
         embed.add_field(name="\u200b", value="\u200b", inline=True)
 
     embed.timestamp = datetime.datetime.now()
     embed = embed.set_footer(text=f"uwu wowow {leader} senpai is so sugoiiii")
 
     # Footer image
-    crossword_icon = "ibaelia_images//wow_irelia.jpg"
-    discord.File(crossword_icon, filename="image.jpg")
-    embed = embed.set_image(url="attachment://image.jpg")
+    crossword_icon = "ibaelia_images/wow_irelia.jpg"
+    file = discord.File(crossword_icon, filename="wow_irelia.jpg")
+    files.append(file)
+    embed = embed.set_image(url="attachment://wow_irelia.jpg")
 
-    return embed
+    return files, embed
