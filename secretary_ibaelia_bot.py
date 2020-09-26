@@ -12,7 +12,8 @@ pic_ext = ['.jpg','.png','.jpeg']
 
 initial_extensions = [
     'cogs.crossword',
-    'cogs.ibaelia'
+    'cogs.ibaelia',
+    'cogs.reactionlistener'
     ]
 
 bot = commands.Bot(command_prefix="uwu!")
@@ -27,6 +28,44 @@ async def on_ready():
     print(f"{bot.user} has connected to Discord!")
     activity = discord.Activity(name='your uwus!',type=2)
     await bot.change_presence(activity=activity)
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    reaction_channel_id = 759126207177687141
+
+    if reaction.message.channel.id != reaction_channel_id:
+        return
+    print(str(reaction.emoji))
+    if str(reaction.emoji) == "1️⃣":
+        channel = bot.get_channel(759117258307403826)  
+        perms = channel.overwrites_for(user)   
+        perms.read_messages = True
+        await channel.set_permissions(user, overwrite=perms)
+
+    elif str(reaction.emoji) == "2️⃣":
+        channel = bot.get_channel(759299496256602123)  
+        perms = channel.overwrites_for(user)   
+        perms.read_messages = True
+        await channel.set_permissions(user, overwrite=perms)
+
+@bot.event
+async def on_reaction_remove(reaction, user):
+    reaction_channel_id = 759126207177687141
+
+    if reaction.message.channel.id != reaction_channel_id:
+        return
+
+    if str(reaction.emoji) == "1️⃣":
+        channel = bot.get_channel(759117258307403826)  
+        perms = channel.overwrites_for(user)   
+        perms.read_messages = False
+        await channel.set_permissions(user, overwrite=perms)
+
+    elif str(reaction.emoji) == "2️⃣":
+        channel = bot.get_channel(759299496256602123)  
+        perms = channel.overwrites_for(user)   
+        perms.read_messages = False
+        await channel.set_permissions(user, overwrite=perms)
 
 # Errors >!< 
 @bot.event
