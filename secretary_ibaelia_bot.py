@@ -30,41 +30,45 @@ async def on_ready():
     await bot.change_presence(activity=activity)
 
 @bot.event
-async def on_reaction_add(reaction, user):
+async def on_raw_reaction_add(payload):
     reaction_channel_id = 759126207177687141
+    user = bot.get_user(payload.user_id)
 
-    if reaction.message.channel.id != reaction_channel_id:
+    if payload.channel_id != reaction_channel_id:
         return
-    print(str(reaction.emoji))
-    if str(reaction.emoji) == "1️⃣":
+
+    print(str(payload.emoji))
+    if str(payload.emoji) == "1️⃣":
         channel = bot.get_channel(759117258307403826)  
         perms = channel.overwrites_for(user)   
         perms.read_messages = True
         await channel.set_permissions(user, overwrite=perms)
 
-    elif str(reaction.emoji) == "2️⃣":
+    elif str(payload.emoji) == "2️⃣":
         channel = bot.get_channel(759299496256602123)  
         perms = channel.overwrites_for(user)   
         perms.read_messages = True
         await channel.set_permissions(user, overwrite=perms)
 
 @bot.event
-async def on_reaction_remove(reaction, user):
+async def on_raw_reaction_remove(payload):
     reaction_channel_id = 759126207177687141
+    user = bot.get_user(payload.user_id)
 
-    if reaction.message.channel.id != reaction_channel_id:
+    if payload.channel_id != reaction_channel_id:
         return
 
-    if str(reaction.emoji) == "1️⃣":
+    print(str(payload.emoji))
+    if str(payload.emoji) == "1️⃣":
         channel = bot.get_channel(759117258307403826)  
         perms = channel.overwrites_for(user)   
-        perms.read_messages = False
+        perms.read_messages = True
         await channel.set_permissions(user, overwrite=perms)
 
-    elif str(reaction.emoji) == "2️⃣":
+    elif str(payload.emoji) == "2️⃣":
         channel = bot.get_channel(759299496256602123)  
         perms = channel.overwrites_for(user)   
-        perms.read_messages = False
+        perms.read_messages = True
         await channel.set_permissions(user, overwrite=perms)
 
 # Errors >!< 
