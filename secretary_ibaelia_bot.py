@@ -61,13 +61,13 @@ async def on_raw_reaction_remove(payload):
     if str(payload.emoji) == "1️⃣":
         channel = bot.get_channel(759117258307403826)  
         perms = channel.overwrites_for(user)   
-        perms.read_messages = True
+        perms.read_messages = False
         await channel.set_permissions(user, overwrite=perms)
 
     elif str(payload.emoji) == "2️⃣":
         channel = bot.get_channel(759299496256602123)  
         perms = channel.overwrites_for(user)   
-        perms.read_messages = True
+        perms.read_messages = False
         await channel.set_permissions(user, overwrite=perms)
 
 # Errors >!< 
