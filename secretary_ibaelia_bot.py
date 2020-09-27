@@ -12,8 +12,7 @@ pic_ext = ['.jpg','.png','.jpeg']
 
 initial_extensions = [
     'cogs.crossword',
-    'cogs.ibaelia',
-    'cogs.reactionlistener'
+    'cogs.ibaelia'
     ]
 
 channel_emoji_dict = {
