@@ -16,6 +16,16 @@ initial_extensions = [
     'cogs.reactionlistener'
     ]
 
+channel_emoji_dict = {
+    "1️⃣": 759117258307403826,
+    "2️⃣": 759299496256602123,
+    "3️⃣": 759630994205704211
+}
+
+
+reaction_channel_id = 759126207177687141
+
+
 bot = commands.Bot(command_prefix="uwu!")
 
 if __name__ == '__main__':
@@ -31,44 +41,30 @@ async def on_ready():
 
 @bot.event
 async def on_raw_reaction_add(payload):
-    reaction_channel_id = 759126207177687141
     user = bot.get_user(payload.user_id)
 
     if payload.channel_id != reaction_channel_id:
         return
 
-    print(str(payload.emoji))
-    if str(payload.emoji) == "1️⃣":
-        channel = bot.get_channel(759117258307403826)  
-        perms = channel.overwrites_for(user)   
-        perms.read_messages = True
-        await channel.set_permissions(user, overwrite=perms)
-
-    elif str(payload.emoji) == "2️⃣":
-        channel = bot.get_channel(759299496256602123)  
+    emoji_str = str(payload.emoji)
+    if emoji_str in channel_emoji_dict:
+        channel = bot.get_channel(channel_emoji_dict[emoji_str])  
         perms = channel.overwrites_for(user)   
         perms.read_messages = True
         await channel.set_permissions(user, overwrite=perms)
 
 @bot.event
 async def on_raw_reaction_remove(payload):
-    reaction_channel_id = 759126207177687141
     user = bot.get_user(payload.user_id)
 
     if payload.channel_id != reaction_channel_id:
         return
 
-    print(str(payload.emoji))
-    if str(payload.emoji) == "1️⃣":
-        channel = bot.get_channel(759117258307403826)  
+    emoji_str = str(payload.emoji)
+    if emoji_str in channel_emoji_dict:
+        channel = bot.get_channel(channel_emoji_dict[emoji_str])  
         perms = channel.overwrites_for(user)   
-        perms.read_messages = True
-        await channel.set_permissions(user, overwrite=perms)
-
-    elif str(payload.emoji) == "2️⃣":
-        channel = bot.get_channel(759299496256602123)  
-        perms = channel.overwrites_for(user)   
-        perms.read_messages = True
+        perms.read_messages = False
         await channel.set_permissions(user, overwrite=perms)
 
 # Errors >!< 
