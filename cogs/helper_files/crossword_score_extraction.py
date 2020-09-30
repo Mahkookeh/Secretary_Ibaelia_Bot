@@ -14,7 +14,7 @@ image_path = "..\\..\\test_images\\"
 def parse_text(text):
     start = "puzzle in"
     end = r"\."
-    result = re.search(r"%s\s?(.*)%s|%s\n*(.*)" % (start, end, start), text)
+    result = re.search(r"%s\s?(.*)%s|%s\n*(.*[^!])" % (start, end, start), text)
     if result.group(1):
         return result.group(1)
     else:
@@ -34,6 +34,7 @@ def format_time(time_text):
 
 def get_time_from_image(img):
     text = pytesseract.image_to_string(img)
+    print(text)
     time_text = parse_text(text)
     formatted_time = format_time(time_text)
     return formatted_time
