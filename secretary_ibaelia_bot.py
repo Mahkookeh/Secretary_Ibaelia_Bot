@@ -1,9 +1,11 @@
 import os
+import ast
+import json
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands
 
-load_dotenv()
+load_dotenv(encoding="utf_8")
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = os.getenv("DISCORD_GUILD")
 
@@ -15,13 +17,8 @@ initial_extensions = [
     'cogs.ibaelia'
     ]
 
-channel_emoji_dict = {
-    "1️⃣": 759117258307403826,
-    "2️⃣": 759299496256602123,
-    "3️⃣": 759630994205704211,
-    "4️⃣": 760036465081712641,
-    "5️⃣": 760385752512725022
-}
+CHANNEL_EMOJI_DICT = os.getenv("CHANNEL_EMOJI_DICT")
+channel_emoji_dict = json.loads(CHANNEL_EMOJI_DICT)
 
 
 reaction_channel_id = 759126207177687141
