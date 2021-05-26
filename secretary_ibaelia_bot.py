@@ -2,6 +2,7 @@ import os
 import ast
 import json
 import discord
+import re
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -21,7 +22,11 @@ CHANNEL_EMOJI_DICT = os.getenv("CHANNEL_EMOJI_DICT")
 channel_emoji_dict = json.loads(CHANNEL_EMOJI_DICT)
 
 
+
 reaction_channel_id = 759126207177687141
+reaction_channel1to5_id = 846974659332538379
+
+regex_pattern_1to5 = re.compile("(Outplay: |Funny: ).*\nPeople In Clip: .*\nExtra Notes: ((?:.|\n)*)\n<.*>((?:.|\n)*)")
 
 
 bot = commands.Bot(command_prefix="uwu!")
@@ -36,6 +41,21 @@ async def on_ready():
     print(f"{bot.user} has connected to Discord!")
     activity = discord.Activity(name='your uwus!',type=2)
     await bot.change_presence(activity=activity)
+
+# On message to discord
+@bot.event
+async def on_message(payload):
+
+    if (payload.channel.id == reaction_channel1to5_id):
+        print(f"{bot.user} heard your message!")
+        print(payload.content)
+        if (regex_pattern_1to5.match(payload.content)):
+            emojis_1to5 = list(channel_emoji_dict.keys())[:5]
+            for emoji in emojis_1to5:
+                await payload.add_reaction(emoji)
+        else:
+            print("bad message")
+
 
 @bot.event
 async def on_raw_reaction_add(payload):
