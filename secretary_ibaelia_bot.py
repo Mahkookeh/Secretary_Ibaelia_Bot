@@ -55,6 +55,7 @@ async def on_message(payload):
                 await payload.add_reaction(emoji)
         else:
             print("bad message")
+    await bot.process_commands(payload)
 
 
 @bot.event
