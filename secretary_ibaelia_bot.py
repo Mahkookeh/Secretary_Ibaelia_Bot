@@ -105,6 +105,13 @@ async def on_raw_reaction_remove(payload):
             perms = channel.overwrites_for(user)   
             perms.read_messages = False
             await channel.set_permissions(user, overwrite=perms)
+    if payload.channel_id == reaction_channel_id_2021:
+        emoji_str = str(payload.emoji)
+        if emoji_str in channel_emoji_dict_2021:
+            channel = bot.get_channel(channel_emoji_dict_2021[emoji_str])  
+            perms = channel.overwrites_for(user)   
+            perms.read_messages = False
+            await channel.set_permissions(user, overwrite=perms)
     elif payload.channel_id == reaction_channel1to5_id:
         if payload.message_id == reaction_channel1to5_message_id:
             print(payload.emoji.name)
