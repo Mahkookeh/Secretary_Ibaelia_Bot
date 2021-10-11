@@ -22,8 +22,12 @@ CHANNEL_EMOJI_DICT = os.getenv("CHANNEL_EMOJI_DICT")
 channel_emoji_dict = json.loads(CHANNEL_EMOJI_DICT)
 
 
+CHANNEL_EMOJI_DICT_2021 = os.getenv("CHANNEL_EMOJI_DICT_2021")
+channel_emoji_dict_2021 = json.loads(CHANNEL_EMOJI_DICT_2021)
+
 
 reaction_channel_id = 759126207177687141
+reaction_channel_id_2021 = 897032807497469952
 
 reaction_channel1to5_id = 846974659332538379
 reaction_channel1to5_message_id = 846975577368952832
@@ -68,6 +72,13 @@ async def on_raw_reaction_add(payload):
         emoji_str = str(payload.emoji)
         if emoji_str in channel_emoji_dict:
             channel = bot.get_channel(channel_emoji_dict[emoji_str])  
+            perms = channel.overwrites_for(user)   
+            perms.read_messages = True
+            await channel.set_permissions(user, overwrite=perms)
+    if payload.channel_id == reaction_channel_id_2021:
+        emoji_str = str(payload.emoji)
+        if emoji_str in channel_emoji_dict_2021:
+            channel = bot.get_channel(channel_emoji_dict_2021[emoji_str])  
             perms = channel.overwrites_for(user)   
             perms.read_messages = True
             await channel.set_permissions(user, overwrite=perms)
