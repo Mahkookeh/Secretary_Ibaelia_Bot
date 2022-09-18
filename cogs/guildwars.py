@@ -61,6 +61,10 @@ class GuildWarsCommands(commands.Cog):
                 print(f'{phaseConfigName}: {type(phaseConfig)}') 
                 payload = {'Url List' : (urlListName, urlList), 'Phase Config': (phaseConfigName, phaseConfig)}
                 print('after payload 2') 
+                
+                headers={'Username': 'abc@gmail.com', 'apikey':'123-456'}
+                print(f'username: {os.getenv("LOGPARSER_USERNAME")}')
+                print(f'password: {os.getenv("LOGPARSER_PASSWORD")}')
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         
         embed = discord.Embed(title="Upload Logs", color=0x14e1d4)
