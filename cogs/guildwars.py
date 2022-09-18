@@ -64,7 +64,7 @@ class GuildWarsCommands(commands.Cog):
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         
         embed = discord.Embed(title="Upload Logs", color=0x14e1d4)
-
+        print(r)
         result_json = r.json()
         print(f'result json: {result_json}')
         print(f'result json: {type(result_json)}')
