@@ -60,7 +60,7 @@ class GuildWarsCommands(commands.Cog):
         
         result_json = r.json()
         result_file = open('results.json', 'w')
-        json.dump(result_json, result_file)
+        json.dump(result_json, result_file, indent=4)
         result_file.close()
         
         if r.status_code == 200:
