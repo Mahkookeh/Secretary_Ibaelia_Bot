@@ -1,3 +1,4 @@
+from unittest import result
 import discord
 from discord.ext import commands
 # from discord import option
@@ -38,6 +39,7 @@ class GuildWarsCommands(commands.Cog):
                 if url and attachment.filename in [urlListName, phaseConfigName]:
                     r = requests.get(url, allow_redirects=True)
                     file = attachment.filename
+                    print(f'{file}: {r.text}')    
                     open(file, 'wb').write(r.content)
             except:
                 pass
@@ -54,6 +56,7 @@ class GuildWarsCommands(commands.Cog):
         embed = discord.Embed(title="Upload Logs", color=0x14e1d4)
 
         result_json = r.json()
+        print(f'result json: {result_json}')
         result_file = open('results.json', 'w')
         json.dump(result_json, result_file)
         result_file.close()
