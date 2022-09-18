@@ -47,12 +47,20 @@ class GuildWarsCommands(commands.Cog):
         payload = {}
         print(f'phaseConfigName: {phaseConfigName}')
         if phaseConfigName is None:
-            with open(urlListName, 'rb') as urlList:
+            with open(urlListName, 'rb') as urlList:  
+                print(f'{urlListName}: {urlList}') 
+                print(f'{urlListName}: {type(urlList)}') 
                 payload = {'Url List' : urlList}
+                print('after payload 1') 
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         else:
             with open(urlListName, 'rb') as urlList, open(phaseConfigName, 'rb') as phaseConfig:
+                print(f'{urlListName}: {urlList}') 
+                print(f'{urlListName}: {type(urlList)}') 
+                print(f'{phaseConfigName}: {phaseConfig}') 
+                print(f'{phaseConfigName}: {type(phaseConfig)}') 
                 payload = {'Url List' : urlList, 'Phase Config': phaseConfig}
+                print('after payload 2') 
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         
         embed = discord.Embed(title="Upload Logs", color=0x14e1d4)
