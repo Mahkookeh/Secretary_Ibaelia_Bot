@@ -41,7 +41,7 @@ class GuildWarsCommands(commands.Cog):
                     file = attachment.filename
                     print(f'{file}: {r.content}')    
                     print(f'{file}: {r.text}')    
-                    open(file, 'wb').write(r.text)
+                    open(file, 'wb').write(r.content)
             except:
                 pass
         payload = {}
