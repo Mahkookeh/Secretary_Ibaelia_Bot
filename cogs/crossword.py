@@ -10,7 +10,7 @@ from dateutil.parser import parse
 from discord.ext import commands
 
 class CrosswordCommands(commands.Cog):
-    """Crossword Commands"""
+    """Ibaelia Bot's Crossword Commands"""
     def __init__(self, bot):
         self.bot = bot
 
@@ -136,5 +136,5 @@ class CrosswordCommands(commands.Cog):
         else:
             await ctx.send(f"Nice try, but {other_username} already has a submitted time of {prev_score} for today.")
 
-def setup(bot):
-    bot.add_cog(CrosswordCommands(bot))
+async def setup(bot):
+    await bot.add_cog(CrosswordCommands(bot))

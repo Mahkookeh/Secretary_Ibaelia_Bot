@@ -39,10 +39,6 @@ class IbaeliaCommands(commands.Cog):
         embed.set_footer(text="uwu")
         await ctx.send(file=file, embed=embed)
     
-    @commands.command(name="furry", help="thicc")
-    async def furry_clip(self, ctx):
-        await ctx.send("Enjoy!\nhttps://streamable.com/qs39z6")
-    
     @commands.command(name="uwu")
     async def test_function(self, ctx):
         embed = discord.Embed(color=0x14e1d4)
@@ -56,5 +52,5 @@ class IbaeliaCommands(commands.Cog):
     async def _help(self, ctx):
         await ctx.send_help()
         
-def setup(bot):
-    bot.add_cog(IbaeliaCommands(bot))
+async def setup(bot):
+    await bot.add_cog(IbaeliaCommands(bot))

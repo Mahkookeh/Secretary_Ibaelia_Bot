@@ -5,6 +5,7 @@ import discord
 import re
 from dotenv import load_dotenv
 from discord.ext import commands
+import asyncio
 
 load_dotenv(encoding="utf_8")
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -13,10 +14,11 @@ GUILD = os.getenv("DISCORD_GUILD")
 pic_ext = ['.jpg','.png','.jpeg']
 
 
-initial_extensions = [
-    'cogs.crossword',
-    'cogs.ibaelia'
-    ]
+# initial_extensions = [
+#     'cogs.crossword',
+#     'cogs.ibaelia',
+#     'cogs.guildwars'
+#     ]
 
 CHANNEL_EMOJI_DICT = os.getenv("CHANNEL_EMOJI_DICT")
 channel_emoji_dict = json.loads(CHANNEL_EMOJI_DICT)
@@ -35,11 +37,17 @@ reaction_channel1to5_message_id = 846975577368952832
 regex_pattern_1to5 = re.compile("(<@!*&*[0-9]+>\\s*\n)?(Outplay: |Funny: ).*\nPeople In Clip: .*\nExtra Notes: ((?:.|\n)*)\n<.*>((?:.|\n)*)")
 
 
-bot = commands.Bot(command_prefix="uwu!")
+bot = commands.Bot(command_prefix="uwu!", intents=discord.Intents.all())
+
+async def load_extensions():
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py") and filename != '__init__.py':
+            # cut off the .py from the file name
+            await bot.load_extension(f"cogs.{filename[:-3]}")
+
 
 if __name__ == '__main__':
-    for extension in initial_extensions:
-        bot.load_extension(extension)
+    asyncio.get_event_loop().run_until_complete(load_extensions())
 
 # On connection to discord
 @bot.event
@@ -90,6 +98,8 @@ async def on_raw_reaction_add(payload):
                 role = discord.utils.get(guild.roles, name="Clip Connoisseur")
                 member = guild.get_member(payload.user_id)
                 await member.add_roles(role)
+    elif payload.channel_id in spoiler_thread_channel_ids:
+        pass
 
 
 
@@ -130,4 +140,5 @@ async def on_error(event, *args, **kwargs):
         else:
             raise
 
-bot.run(TOKEN, bot=True)
+
+bot.run(TOKEN)
