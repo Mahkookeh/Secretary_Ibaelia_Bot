@@ -50,7 +50,7 @@ class GuildWarsCommands(commands.Cog):
             with open(urlListName, 'rb') as urlList:  
                 print(f'{urlListName}: {urlList}') 
                 print(f'{urlListName}: {type(urlList)}') 
-                payload = {'Url List' : urlList}
+                payload = {'Url List' : (urlListName, urlList)}
                 print('after payload 1') 
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         else:
@@ -59,7 +59,7 @@ class GuildWarsCommands(commands.Cog):
                 print(f'{urlListName}: {type(urlList)}') 
                 print(f'{phaseConfigName}: {phaseConfig}') 
                 print(f'{phaseConfigName}: {type(phaseConfig)}') 
-                payload = {'Url List' : urlList, 'Phase Config': phaseConfig}
+                payload = {'Url List' : (urlListName, urlList), 'Phase Config': (phaseConfigName, phaseConfig)}
                 print('after payload 2') 
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         
