@@ -5,6 +5,7 @@ from discord.ext import commands
 import requests
 import os
 import json
+import codecs
 
 class GuildWarsCommands(commands.Cog):
     """Ibaelia Bot's Guild Wars Commands"""
@@ -48,33 +49,20 @@ class GuildWarsCommands(commands.Cog):
         print(f'phaseConfigName: {phaseConfigName}')
         if phaseConfigName is None:
             with open(urlListName, 'rb') as urlList:  
-                print(f'{urlListName}: {urlList}') 
-                print(f'{urlListName}: {type(urlList)}') 
                 payload = {'Url List' : (urlListName, urlList)}
-                print('after payload 1') 
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         else:
             with open(urlListName, 'rb') as urlList, open(phaseConfigName, 'rb') as phaseConfig:
-                print(f'{urlListName}: {urlList}') 
-                print(f'{urlListName}: {type(urlList)}') 
-                print(f'{phaseConfigName}: {phaseConfig}') 
-                print(f'{phaseConfigName}: {type(phaseConfig)}') 
                 payload = {'Url List' : (urlListName, urlList), 'Phase Config': (phaseConfigName, phaseConfig)}
-                print('after payload 2') 
-                
-                headers={'Username': 'abc@gmail.com', 'apikey':'123-456'}
-                print(f'username: {os.getenv("LOGPARSER_USERNAME")}')
-                print(f'password: {os.getenv("LOGPARSER_PASSWORD")}')
                 r = requests.post('https://logparser.fly.dev/api/logs-with-data/', files = payload, auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         
         embed = discord.Embed(title="Upload Logs", color=0x14e1d4)
-        print(r)
+        
         result_json = r.json()
-        print(f'result json: {result_json}')
-        print(f'result json: {type(result_json)}')
         result_file = open('results.json', 'w')
         json.dump(result_json, result_file)
         result_file.close()
+        
         if r.status_code == 200:
             embed.add_field(value='Upload successful!', name='\u200b')
         else:
@@ -93,6 +81,67 @@ class GuildWarsCommands(commands.Cog):
             await ctx.send(f"You're missing a required argument idiot.¯\\_(ツ)_/¯\n**Usage: {ctx.prefix}{ctx.command.name} {ctx.command.signature}**")
         if isinstance(error, commands.FileNotFoundError): # TODO: Fix
             await ctx.send(f"You didn't attach a file with the right name idiot.¯\\_(ツ)_/¯\n**Usage: {ctx.prefix}{ctx.command.name} {ctx.command.signature}**")
+
+            
+
+    @commands.command(name="getLogs", usage="[group=None] [inhouseplayers=None] [fields=None]", description="", show_parameter_descriptions=False, arguments_heading=False, pass_context=True)
+    # @option("urlListName", str, description="The name of the file containing all urls to parse in the LogParser.")
+    # @option("phaseConfigName", str, description="The name of the file containing the phase configurations. If a phase config file isn't sent, the default phase configurations will be used.")
+    async def get_logs(self, ctx, group: str = None, inhouseplayers: int = None, fields: str = None) -> None:
+        """Get Logs from the LogParser database
+        
+        Get the big fancy leaderboard to check out how big your pp is!
+
+        Parameters
+        ------------
+        group: str (default: Boba)
+            The name of the group the leaderboard shows results for.
+        inhouseplayers: int (default: 5)
+            The minimum number of in-house players for logs to be included in the leaderboard. (10 = only logs with all 10 players being in the provided group will be included in the leaderboard)
+        fields: str (default: Boss,Duration,Mode,Phase,PlayerId,Character,Class,TargetDps,PercentTargetDps,PowerDps,CondiDps,LogUrl,InHousePlayers,TotalPlayers)
+            The fields to return and what order they will be presented in. 
+
+        Raises
+        ------
+        MissingRequiredArgumentError
+            Required argument is missing.
+        """
+        queryparams='?format=csv'
+        if group:
+            queryparams+=f'&group={group}'
+        if inhouseplayers:
+            queryparams+=f'&inhouseplayers={inhouseplayers}'
+        if fields:
+            queryparams+=f'&fields={fields}'
+        print(f'https://logparser.fly.dev/api/logs-with-data/{queryparams}')
+        r = requests.get(f'https://logparser.fly.dev/api/logs-with-data/{queryparams}', auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
+        embed = discord.Embed(title="Get Logs", color=0x14e1d4)
+        
+        if r.status_code == 200:
+            embed.add_field(value='Logs retrieved successfully!', name='\u200b')
+            decoded = codecs.decode(r.content, 'unicode-escape')
+            with open('results.csv', 'w') as f:
+                f.write(decoded)
+            file_to_return = discord.File('results.csv')
+        else:
+            result_json = r.json()
+            result_file = open('results.json', 'w')
+            json.dump(result_json, result_file)
+            result_file.close()
+            file_to_return = discord.File('results.json')
+            embed.add_field(value='Failed to retriev logs! Check the results file to see the error message.', name='\u200b')
+        embed.set_footer(text="uwu")
+        await ctx.send(embed=embed, file=file_to_return)
+    
+    @get_logs.error
+    async def get_logs_error(self, ctx, error):
+        """A local Error Handler for our command get_logs.
+        This will only listen for errors in get_logs.
+        The global on_command_error will still be invoked after.
+        """
+        print(error)
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(f"You're missing a required argument idiot.¯\\_(ツ)_/¯\n**Usage: {ctx.prefix}{ctx.command.name} {ctx.command.signature}**")
         
 async def setup(bot):
     await bot.add_cog(GuildWarsCommands(bot))

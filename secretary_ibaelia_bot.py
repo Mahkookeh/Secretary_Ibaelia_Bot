@@ -57,79 +57,79 @@ async def on_ready():
     await bot.change_presence(activity=activity)
 
 # On message to discord
-@bot.event
-async def on_message(payload):
+# @bot.event
+# async def on_message(payload):
 
-    if (payload.channel.id == reaction_channel1to5_id):
-        print(f"{bot.user} heard your message!")
-        print(payload.content)
-        if (regex_pattern_1to5.match(payload.content)):
-            emojis_1to5 = list(channel_emoji_dict.keys())[:5]
-            for emoji in emojis_1to5:
-                await payload.add_reaction(emoji)
-        else:
-            print("bad message")
-    await bot.process_commands(payload)
-
-
-@bot.event
-async def on_raw_reaction_add(payload):
-    user = bot.get_user(payload.user_id)
-
-    if payload.channel_id == reaction_channel_id:
-        emoji_str = str(payload.emoji)
-        if emoji_str in channel_emoji_dict:
-            channel = bot.get_channel(channel_emoji_dict[emoji_str])  
-            perms = channel.overwrites_for(user)   
-            perms.read_messages = True
-            await channel.set_permissions(user, overwrite=perms)
-    if payload.channel_id == reaction_channel_id_2021:
-        emoji_str = str(payload.emoji)
-        if emoji_str in channel_emoji_dict_2021:
-            channel = bot.get_channel(channel_emoji_dict_2021[emoji_str])  
-            perms = channel.overwrites_for(user)   
-            perms.read_messages = True
-            await channel.set_permissions(user, overwrite=perms)
-    elif payload.channel_id == reaction_channel1to5_id:
-        if payload.message_id == reaction_channel1to5_message_id:
-            print(payload.emoji.name)
-            if payload.emoji.name == "pepoPigeon":
-                guild = bot.get_guild(payload.guild_id)
-                role = discord.utils.get(guild.roles, name="Clip Connoisseur")
-                member = guild.get_member(payload.user_id)
-                await member.add_roles(role)
-    elif payload.channel_id in spoiler_thread_channel_ids:
-        pass
+#     if (payload.channel.id == reaction_channel1to5_id):
+#         print(f"{bot.user} heard your message!")
+#         print(payload.content)
+#         if (regex_pattern_1to5.match(payload.content)):
+#             emojis_1to5 = list(channel_emoji_dict.keys())[:5]
+#             for emoji in emojis_1to5:
+#                 await payload.add_reaction(emoji)
+#         else:
+#             print("bad message")
+#     await bot.process_commands(payload)
 
 
+# @bot.event
+# async def on_raw_reaction_add(payload):
+#     user = bot.get_user(payload.user_id)
 
-@bot.event
-async def on_raw_reaction_remove(payload):
-    user = bot.get_user(payload.user_id)
+#     if payload.channel_id == reaction_channel_id:
+#         emoji_str = str(payload.emoji)
+#         if emoji_str in channel_emoji_dict:
+#             channel = bot.get_channel(channel_emoji_dict[emoji_str])  
+#             perms = channel.overwrites_for(user)   
+#             perms.read_messages = True
+#             await channel.set_permissions(user, overwrite=perms)
+#     if payload.channel_id == reaction_channel_id_2021:
+#         emoji_str = str(payload.emoji)
+#         if emoji_str in channel_emoji_dict_2021:
+#             channel = bot.get_channel(channel_emoji_dict_2021[emoji_str])  
+#             perms = channel.overwrites_for(user)   
+#             perms.read_messages = True
+#             await channel.set_permissions(user, overwrite=perms)
+#     elif payload.channel_id == reaction_channel1to5_id:
+#         if payload.message_id == reaction_channel1to5_message_id:
+#             print(payload.emoji.name)
+#             if payload.emoji.name == "pepoPigeon":
+#                 guild = bot.get_guild(payload.guild_id)
+#                 role = discord.utils.get(guild.roles, name="Clip Connoisseur")
+#                 member = guild.get_member(payload.user_id)
+#                 await member.add_roles(role)
+#     elif payload.channel_id in spoiler_thread_channel_ids:
+#         pass
 
-    print(payload.channel_id)
-    if payload.channel_id == reaction_channel_id:
-        emoji_str = str(payload.emoji)
-        if emoji_str in channel_emoji_dict:
-            channel = bot.get_channel(channel_emoji_dict[emoji_str])  
-            perms = channel.overwrites_for(user)   
-            perms.read_messages = False
-            await channel.set_permissions(user, overwrite=perms)
-    if payload.channel_id == reaction_channel_id_2021:
-        emoji_str = str(payload.emoji)
-        if emoji_str in channel_emoji_dict_2021:
-            channel = bot.get_channel(channel_emoji_dict_2021[emoji_str])  
-            perms = channel.overwrites_for(user)   
-            perms.read_messages = False
-            await channel.set_permissions(user, overwrite=perms)
-    elif payload.channel_id == reaction_channel1to5_id:
-        if payload.message_id == reaction_channel1to5_message_id:
-            print(payload.emoji.name)
-            if payload.emoji.name == "pepoPigeon":
-                guild = bot.get_guild(payload.guild_id)
-                role = discord.utils.get(guild.roles, name="Clip Connoisseur")
-                member = guild.get_member(payload.user_id)
-                await member.remove_roles(role)
+
+
+# @bot.event
+# async def on_raw_reaction_remove(payload):
+#     user = bot.get_user(payload.user_id)
+
+#     print(payload.channel_id)
+#     if payload.channel_id == reaction_channel_id:
+#         emoji_str = str(payload.emoji)
+#         if emoji_str in channel_emoji_dict:
+#             channel = bot.get_channel(channel_emoji_dict[emoji_str])  
+#             perms = channel.overwrites_for(user)   
+#             perms.read_messages = False
+#             await channel.set_permissions(user, overwrite=perms)
+#     if payload.channel_id == reaction_channel_id_2021:
+#         emoji_str = str(payload.emoji)
+#         if emoji_str in channel_emoji_dict_2021:
+#             channel = bot.get_channel(channel_emoji_dict_2021[emoji_str])  
+#             perms = channel.overwrites_for(user)   
+#             perms.read_messages = False
+#             await channel.set_permissions(user, overwrite=perms)
+#     elif payload.channel_id == reaction_channel1to5_id:
+#         if payload.message_id == reaction_channel1to5_message_id:
+#             print(payload.emoji.name)
+#             if payload.emoji.name == "pepoPigeon":
+#                 guild = bot.get_guild(payload.guild_id)
+#                 role = discord.utils.get(guild.roles, name="Clip Connoisseur")
+#                 member = guild.get_member(payload.user_id)
+#                 await member.remove_roles(role)
 
 # Errors >!< 
 @bot.event
