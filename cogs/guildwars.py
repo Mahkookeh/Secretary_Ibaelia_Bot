@@ -113,6 +113,8 @@ class GuildWarsCommands(commands.Cog):
             queryparams+=f'&inhouseplayers={inhouseplayers}'
         if fields:
             queryparams+=f'&fields={fields}'
+        else:
+            queryparams+=f'&fields=Boss,Duration,Mode,Phase,PlayerId,Character,Class,TargetDps,PercentTargetDps,PowerDps,CondiDps,LogUrl,InHousePlayers,TotalPlayers'
         print(f'https://logparser.fly.dev/api/logs-with-data/{queryparams}')
         r = requests.get(f'https://logparser.fly.dev/api/logs-with-data/{queryparams}', auth=(os.getenv("LOGPARSER_USERNAME"), os.getenv("LOGPARSER_PASSWORD")))
         embed = discord.Embed(title="Get Logs", color=0x14e1d4)
