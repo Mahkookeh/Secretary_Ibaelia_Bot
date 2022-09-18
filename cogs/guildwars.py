@@ -39,11 +39,13 @@ class GuildWarsCommands(commands.Cog):
                 if url and attachment.filename in [urlListName, phaseConfigName]:
                     r = requests.get(url, allow_redirects=True)
                     file = attachment.filename
+                    print(f'{file}: {r.content}')    
                     print(f'{file}: {r.text}')    
-                    open(file, 'wb').write(r.content)
+                    open(file, 'wb').write(r.text)
             except:
                 pass
         payload = {}
+        print(f'phaseConfigName: {phaseConfigName}')
         if phaseConfigName is None:
             with open(urlListName, 'rb') as urlList:
                 payload = {'Url List' : urlList}
@@ -57,6 +59,7 @@ class GuildWarsCommands(commands.Cog):
 
         result_json = r.json()
         print(f'result json: {result_json}')
+        print(f'result json: {type(result_json)}')
         result_file = open('results.json', 'w')
         json.dump(result_json, result_file)
         result_file.close()
